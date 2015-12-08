@@ -16,4 +16,4 @@ You need to have pygame installed.
 * `P` key to pause
 * Right arrow to speed up
 * Left arrow to slow down
-* `Esc` to pause
+* `Esc` to quit
