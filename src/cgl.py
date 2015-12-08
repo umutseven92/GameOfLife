@@ -1,49 +1,89 @@
-from random import randint
+import pygame
+import cgl_helper
+import time
 
-def initial_grid(row, col):
-	grid = []
-	for row in range(row):
-    		grid.append([])
-    		for column in range(col):
-        		grid[row].append(randint(0,1))  
-	return grid
+# Colors used
+black = (0, 0, 0)
+white = (255, 255, 255)
+gray = (192, 192, 192)
 
-def get_neighbor_stat(grid, row, col, r, c):
-	if row + r < 0 or row + r > len(grid) -1:
-		return 0
-	if col + c < 0 or col + c > len(grid[0]) -1:
-		return 0
+MARGIN = 5 # Margin between cells
+WIDTH = 20 # Cell width
+HEIGHT = 20 # Cell height
+ROW = 40 # Row count
+COL = 40 # Column count
 
-	if grid[row + r][col + c] == 1:
-		return 1
-	else:
-	 	return 0
+speed_delta = 10 
+max_speed = 120 
+min_speed = 10
+speed = min_speed
 
-def apply_rules(grid, row, col):
+done = False
+pause = False
 
-	alive = get_alive_count(grid, row, col)
-	cell = grid[row][col]
+pygame.init()
 
-	if alive < 2 and cell == 1:
-		grid[row][col] = 0
-	elif alive > 3 and cell == 1:
-		grid[row][col] = 0
-	elif alive == 3 and cell == 0:
-		grid[row][col] = 1
-	
-	return grid
+window_size = [WIDTH * COL + MARGIN * COL + MARGIN, HEIGHT * ROW + MARGIN * ROW + MARGIN]
 
-def get_alive_count(grid, row, col):
+screen = pygame.display.set_mode(window_size)
 
-	alive_count = 0
-	
-	alive_count += get_neighbor_stat(grid, row, col, 1, 0)
-	alive_count += get_neighbor_stat(grid, row, col, 1, -1)
-	alive_count += get_neighbor_stat(grid, row, col, 1, 1)
-	alive_count += get_neighbor_stat(grid, row, col, 0, 1)
-	alive_count += get_neighbor_stat(grid, row, col, -1, 1)
-	alive_count += get_neighbor_stat(grid, row, col, 0, -1)
-	alive_count += get_neighbor_stat(grid, row, col, -1, -1)
-	alive_count += get_neighbor_stat(grid, row, col, -1, 0)
+pygame.display.set_caption("Game of Life")
 
-	return alive_count
+clock = pygame.time.Clock()
+
+screen.fill(gray)
+grid = cgl_helper.initial_grid(ROW, COL)
+
+def draw_grid():
+	for row in range(ROW):
+		for col in range(COL):
+			if grid[row][col] == 0:
+				color = white 
+			elif grid[row][col] == 1:
+				color = black 
+			pygame.draw.rect(screen, color, [(MARGIN + WIDTH) * col + MARGIN, (MARGIN + HEIGHT) * row + MARGIN, WIDTH, HEIGHT])
+
+while not done:
+	for event in pygame.event.get():
+		if event.type == pygame.QUIT:
+			# Quit
+			done = True
+		elif event.type == pygame.KEYDOWN:
+			if event.key == pygame.K_p:
+				# Pause
+				pause = not pause	
+			elif event.key == pygame.K_r:
+				# Reset
+				grid = cgl_helper.initial_grid(ROW, COL)
+				if pause:
+					pause = not pause
+			elif event.key == pygame.K_ESCAPE:
+				# Quit
+				done = True
+			elif event.key == pygame.K_RIGHT:
+				# Speed up
+				speed += speed_delta
+				if speed > max_speed:
+					speed = max_speed
+			elif event.key == pygame.K_LEFT:
+				# Speed down
+				speed -= speed_delta
+				if speed < min_speed:
+					speed = min_speed
+
+	if not pause:
+		screen.fill(gray)
+
+		draw_grid()
+
+		for row in range(ROW):
+			for col in range(COL):
+				grid = cgl_helper.apply_rules(grid, row, col)
+
+		clock.tick(speed)
+		
+		pygame.display.flip()
+
+pygame.quit()
+
+
