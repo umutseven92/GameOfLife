@@ -5,6 +5,7 @@ To run `cd` into `/src`, and do:
 ```bash
 python cgl.py
 ```
+This will create a random layout.
 
 You can also load [Life 1.05](http://www.conwaylife.com/wiki/Life_1.05) files:
 ```bash
