@@ -21,7 +21,8 @@ Output:
 
 ![alt text](https://raw.githubusercontent.com/umutseven92/GameOfLife/master/pulsar.gif "Pulsar")
 
-You need to have [pygame](http://www.pygame.org/download.shtml) installed. 
+## Dependencies
+You need to have [pygame](http://www.pygame.org/download.shtml) installed.
 
 ## Controls
 * `R` key to reset
