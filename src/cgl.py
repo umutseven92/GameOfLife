@@ -11,8 +11,8 @@ gray = (192, 192, 192)
 MARGIN = 5 # Margin between cells
 WIDTH = 20 # Cell width
 HEIGHT = 20 # Cell height
-ROW = 40 # Row count
-COL = 40 # Column count
+ROW = 40 # Random row count
+COL = 40 # Random column count
 
 speed_delta = 10 
 max_speed = 125 
@@ -24,26 +24,27 @@ pause = False
 
 pygame.init()
 
-window_size = [WIDTH * COL + MARGIN * COL + MARGIN, HEIGHT * ROW + MARGIN * ROW + MARGIN]
 
-screen = pygame.display.set_mode(window_size)
 
 pygame.display.set_caption("Game of Life")
 
 clock = pygame.time.Clock()
 
-screen.fill(gray)
 
 main = grid()
 
-#if len(sys.argv) > 1:
-main.load_map("")
-#else:
-#	main.load_random(ROW, COL)
+if len(sys.argv) > 1:
+	main.load_map(sys.argv[1])
+else:
+	main.load_random(ROW, COL)
+
+window_size = [WIDTH * len(main.grid[0]) + MARGIN * len(main.grid[0]) + MARGIN, HEIGHT * len(main.grid)+ MARGIN * len(main.grid) + MARGIN]
+screen = pygame.display.set_mode(window_size)
+screen.fill(gray)
 
 def draw_grid():
-	for row in range(main.row):
-		for col in range(main.col):
+	for row in range(len(main.grid)):
+		for col in range(len(main.grid[row])):
 			if main.grid[row][col] == 0:
 				color = white 
 			elif main.grid[row][col] == 1:
@@ -61,7 +62,12 @@ while not done:
 				pause = not pause	
 			elif event.key == pygame.K_r:
 				# Reset
-				main.load_random(ROW, COL)
+				if main.map_type == "random":
+					main.load_random(ROW, COL)
+				else:
+					main.load_map(sys.argv[1])
+
+				speed = min_speed
 				if pause:
 					pause = not pause
 			elif event.key == pygame.K_ESCAPE:
