@@ -6,10 +6,21 @@ To run `cd` into `/src`, and do:
 python cgl.py
 ```
 
-You need to have pygame installed.
+You can also load [Life 1.05](http://www.conwaylife.com/wiki/Life_1.05) files:
+```python
+python cgl.py PATH_TO_FILE
+```
 
-## Screenshots
-![alt text](https://raw.githubusercontent.com/umutseven92/GameOfLife/master/screenshot.png?token=ADgTlrdmSs1dCur-vNrDMel5cSptUqNkks5WcIy0wA%3D%3D "Game of Life")
+Some basic patterns are provided in the `/maps` folder. So for example, to load a pulsar:
+```python
+python cgl.py ../maps/pulsar_105.lif
+```
+
+Output:
+
+![alt text](https://raw.githubusercontent.com/umutseven92/GameOfLife/master/pulsar.gif "Pulsar")
+
+You need to have pygame installed.
 
 ## Controls
 * `R` key to reset
