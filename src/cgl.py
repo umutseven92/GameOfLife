@@ -1,6 +1,7 @@
-import pygame
-import cgl_helper
+﻿import pygame
 import time
+import sys
+from grid import grid
 
 # Colors used
 black = (0, 0, 0)
@@ -14,8 +15,8 @@ ROW = 40 # Row count
 COL = 40 # Column count
 
 speed_delta = 10 
-max_speed = 120 
-min_speed = 10
+max_speed = 125 
+min_speed = 5
 speed = min_speed
 
 done = False
@@ -32,14 +33,20 @@ pygame.display.set_caption("Game of Life")
 clock = pygame.time.Clock()
 
 screen.fill(gray)
-grid = cgl_helper.initial_grid(ROW, COL)
+
+main = grid()
+
+#if len(sys.argv) > 1:
+main.load_map("")
+#else:
+#	main.load_random(ROW, COL)
 
 def draw_grid():
-	for row in range(ROW):
-		for col in range(COL):
-			if grid[row][col] == 0:
+	for row in range(main.row):
+		for col in range(main.col):
+			if main.grid[row][col] == 0:
 				color = white 
-			elif grid[row][col] == 1:
+			elif main.grid[row][col] == 1:
 				color = black 
 			pygame.draw.rect(screen, color, [(MARGIN + WIDTH) * col + MARGIN, (MARGIN + HEIGHT) * row + MARGIN, WIDTH, HEIGHT])
 
@@ -54,7 +61,7 @@ while not done:
 				pause = not pause	
 			elif event.key == pygame.K_r:
 				# Reset
-				grid = cgl_helper.initial_grid(ROW, COL)
+				main.load_random(ROW, COL)
 				if pause:
 					pause = not pause
 			elif event.key == pygame.K_ESCAPE:
@@ -76,14 +83,10 @@ while not done:
 
 		draw_grid()
 
-		for row in range(ROW):
-			for col in range(COL):
-				grid = cgl_helper.apply_rules(grid, row, col)
+		main.apply_rules()
 
 		clock.tick(speed)
 		
 		pygame.display.flip()
 
 pygame.quit()
-
-
