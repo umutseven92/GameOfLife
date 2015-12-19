@@ -2,17 +2,17 @@
 Simple Conway's Game of Life, written in Python.
 
 To run `cd` into `/src`, and do: 
-```python
+```bash
 python cgl.py
 ```
 
 You can also load [Life 1.05](http://www.conwaylife.com/wiki/Life_1.05) files:
-```python
+```bash
 python cgl.py PATH_TO_FILE
 ```
 
 Some basic patterns are provided in the `/maps` folder. So for example, to load a pulsar:
-```python
+```bash
 python cgl.py ../maps/pulsar_105.lif
 ```
 
